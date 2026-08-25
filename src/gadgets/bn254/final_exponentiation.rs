@@ -67,7 +67,8 @@ pub fn cyclotomic_exp_fast_inverse_montgomery_fast<C: CircuitContext>(
     f: &Fq12,
 ) -> Fq12 {
     let mut res = Fq12::new_constant(ark_bn254::Fq12::ONE);
-    let f_inverse = Fq12::inverse_montgomery(circuit, f);
+    // After the easy part, f lives in the cyclotomic subgroup, so f^{-1} = conjugate(f).
+    let f_inverse = Fq12::conjugate(circuit, f);
 
     let mut found_nonzero = false;
     for value in ark_ff::biginteger::arithmetic::find_naf(ark_bn254::Config::X)
